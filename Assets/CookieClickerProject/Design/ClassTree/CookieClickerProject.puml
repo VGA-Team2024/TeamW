@@ -1,0 +1,51 @@
+@startuml
+!theme plain
+
+package "プレゼンテーション層" {
+  class GUI {
+    +updateDisplay()
+    +handleUserInput()
+  }
+}
+
+package "アプリケーション層" {
+  class GameController {
+    +startGame()
+    +handleClick()
+    +purchaseUpgrade()
+    +purchaseProducer()
+  }
+}
+
+package "ドメイン層" {
+  class Player {
+  }
+
+  class Cookie {
+  }
+
+  class Producer {
+    +produce()
+  }
+
+  class Upgrade {
+    +applyUpgrade()
+  }
+}
+
+package "データアクセス層" {
+  class DataStorage {
+    +loadGame()
+    +saveGame()
+  }
+}
+
+GUI ..> GameController : uses
+GameController ..> Player : uses
+GameController ..> Cookie : uses
+GameController ..> Producer : uses
+GameController ..> Upgrade : uses
+GameController ..> DataStorage : uses
+
+
+@enduml
