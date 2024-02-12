@@ -14,6 +14,8 @@ package "アプリケーション層" {
     +handleClick()
     +purchaseUpgrade()
     +purchaseProducer()
+    +saveGame()
+    +loadGame()
   }
 }
 
@@ -21,9 +23,11 @@ package "ドメイン層" {
   class Player {
   }
 
-  class Cookie {
+  class Resource {
+    +quantity: decimal
+    +name: string
   }
-
+  
   class Producer {
     +produce()
   }
@@ -31,21 +35,38 @@ package "ドメイン層" {
   class Upgrade {
     +applyUpgrade()
   }
+
+  class Statistics {
+    +updateStats()
+    +displayStats()
+  }
 }
 
 package "データアクセス層" {
   class DataStorage {
-    +loadGame()
-    +saveGame()
+    +loadGame(): GameData
+    +saveGame(gameData: GameData)
+  }
+  class PlayerData {
+    +resources: Resource[]
+    +upgrades: Upgrade[]
+    +producers: Producer[]
+  }
+  class GameData {
+    +playerData: PlayerData
+    +resources: Resource[]
+    +statistics: Statistics
   }
 }
 
 GUI ..> GameController : uses
 GameController ..> Player : uses
-GameController ..> Cookie : uses
+GameController ..> Resource : uses
 GameController ..> Producer : uses
 GameController ..> Upgrade : uses
+GameController ..> Statistics : uses
 GameController ..> DataStorage : uses
-
+DataStorage --> PlayerData : manages
+DataStorage --> GameData : manages
 
 @enduml
