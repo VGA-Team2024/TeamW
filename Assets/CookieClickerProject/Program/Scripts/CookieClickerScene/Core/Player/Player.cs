@@ -7,6 +7,9 @@ public class Player : MonoBehaviour
 {
     void Update()
     {
-        //handleClick();
+        if (Input.GetMouseButtonDown(0))
+        {
+            //handleClick();
+        }
     }
 }
