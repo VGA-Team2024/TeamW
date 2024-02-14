@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class DoubleUp : MonoBehaviour, ISkill
+public class DoubleUp : MonoBehaviour, IUpGrade
 {
     public int Level { get ; set; }
 
