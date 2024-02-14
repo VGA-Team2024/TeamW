@@ -4,13 +4,18 @@ using System.Collections;
 public class Resource : MonoBehaviour
 {
     /// <summary> クリックの総数 </summary>
-    public decimal _totalClicks;
+    [SerializeField] private decimal _totalClicks;
+
     /// <summary> リソースの総数 </summary>
-    public decimal _totalResources;
+    [SerializeField] private decimal _totalResources;
+
     /// <summary> 毎秒作られるリソースの数 </summary>
-    public int _resourcesCreatedPerSecond;
+    [SerializeField] private int _resourcesCreatedPerSecond;
+
     /// <summary> 一回のクリックで作られるリソースの数 </summary>
-    public int _resourcesPerClick;
+    [SerializeField] private int _resourcesPerClick;
+
+    public decimal TotalClicks { set => _totalClicks = value; }
 
     void Awake()
     {
@@ -26,7 +31,6 @@ public class Resource : MonoBehaviour
 
     void Update()
     {
-        
     }
 
     /// <summary>
@@ -38,9 +42,9 @@ public class Resource : MonoBehaviour
     /// 一秒ごとに_resourcesCreatedPerSecondの分リソースが増えるコルーチン
     /// </summary>
     /// <returns></returns>
-    IEnumerator Span()
+    private IEnumerator Span()
     {
-        while (true) 
+        while (true)
         {
             yield return new WaitForSecondsRealtime(1);
             _totalResources += _resourcesCreatedPerSecond;

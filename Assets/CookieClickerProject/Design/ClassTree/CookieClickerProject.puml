@@ -1,51 +1,113 @@
 @startuml
 !theme plain
 
+' プレゼンテーション層
 package "プレゼンテーション層" {
-  class GUI {
-    +updateDisplay()
-    +handleUserInput()
-  }
+    class GUI {
+        +updateDisplay()
+        +handleUserInput()
+    }
+    class UIManager {
+        +Initialize()
+    }
+    class PlayerView {
+    }
+    class PlayerPresenter {
+        +UpdateView()
+        +HandleInput()
+    }
+    class ShopView {
+    }
+    class ShopPresenter {
+        +UpdateView()
+        +HandleInput()
+    }
+    class ResourceView {
+    }
+    class ResourcePresenter {
+        +UpdateView()
+        +HandleInput()
+    }
 }
 
+' アプリケーション層
 package "アプリケーション層" {
-  class GameController {
-    +startGame()
-    +handleClick()
-    +purchaseUpgrade()
-    +purchaseProducer()
-  }
+    class GameManager {
+        +startGame()
+        +saveGame()
+        +loadGame()
+    }
+    class GameController {
+        +handleClick()
+        +purchaseUpgrade()
+        +purchaseProducer()
+    }
 }
 
+' ドメイン層
 package "ドメイン層" {
-  class Player {
-  }
-
-  class Cookie {
-  }
-
-  class Producer {
-    +produce()
-  }
-
-  class Upgrade {
-    +applyUpgrade()
-  }
+    class PlayerModel {
+    }
+    class ShopModel {
+    }
+    class ResourceModel {
+    }
+    class Player {
+    }
+    class Resource {
+        +quantity: decimal
+        +name: string
+    }
+    class Producer {
+        +produce()
+    }
+    class Upgrade {
+        +applyUpgrade()
+    }
+    class Statistics {
+        +updateStats()
+        +displayStats()
+    }
 }
 
+' データアクセス層
 package "データアクセス層" {
-  class DataStorage {
-    +loadGame()
-    +saveGame()
-  }
+    class DataStorage {
+        +loadGame()
+        +saveGame() 
+    }
+    class PlayerData {
+        +resources: Resource[]
+        +upgrades: Upgrade[]
+        +producers: Producer[]
+    }
+    class GameData {
+        +playerData: PlayerData
+        +resources: Resource[]
+        +statistics: Statistics
+    }
 }
 
-GUI ..> GameController : uses
-GameController ..> Player : uses
-GameController ..> Cookie : uses
-GameController ..> Producer : uses
-GameController ..> Upgrade : uses
-GameController ..> DataStorage : uses
+' 依存関係
+GameManager ..> GameController : <<controls>>
+GameController ..> UIManager : <<uses>>
+UIManager ..> PlayerPresenter : <<initializes>>
+UIManager ..> ShopPresenter : <<initializes>>
+UIManager ..> ResourcePresenter : <<initializes>>
+PlayerPresenter ..> PlayerModel : <<interacts with>>
+PlayerPresenter ..> PlayerView : <<updates>>
+ShopPresenter ..> ShopModel : <<interacts with>>
+ShopPresenter ..> ShopView : <<updates>>
+ResourcePresenter ..> ResourceModel : <<interacts with>>
+ResourcePresenter ..> ResourceView : <<updates>>
+GameManager ..> DataStorage : <<uses>>
+DataStorage --> GameData : <<manages>>
+DataStorage --> PlayerData : <<manages>>
+GameController ..> PlayerModel : <<uses>>
+GameController ..> ResourceModel : <<uses>>
+GameController ..> Producer : <<uses>>
+GameController ..> Upgrade : <<uses>>
+GameController ..> Statistics : <<uses>>
 
 
 @enduml

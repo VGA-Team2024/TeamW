@@ -1,0 +1,49 @@
+﻿@startuml
+!theme plain
+
+package "Player MVP" {
+    class PlayerModel {
+    }
+    class PlayerView {
+    }
+    class PlayerPresenter {
+    }
+    PlayerModel -[hidden]right-> PlayerView : Uses
+    PlayerPresenter -down-> PlayerModel : Updates
+    PlayerPresenter -down-> PlayerView : Updates
+}
+
+package "Shop MVP" {
+    class ShopModel {
+    }
+    class ShopView {
+    }
+    class ShopPresenter {
+    }
+    ShopModel -[hidden]right-> ShopView : Uses
+    ShopPresenter -down-> ShopModel : Updates
+    ShopPresenter -down-> ShopView : Updates
+}
+
+package "Resource MVP" {
+    class ResourceModel {
+    }
+    class ResourceView {
+    }
+    class ResourcePresenter {
+    }
+    ResourceModel -[hidden]right-> ResourceView : Uses
+    ResourcePresenter -down-> ResourceModel : Updates
+    ResourcePresenter -down-> ResourceView : Updates
+}
+
+class UIManager {
+    +Initialize()
+}
+
+UIManager -down-> PlayerPresenter : Manages
+UIManager -down-> ShopPresenter : Manages
+UIManager -down-> ResourcePresenter : Manages
+
+
+@enduml

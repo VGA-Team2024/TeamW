@@ -1,0 +1,47 @@
+﻿@startuml
+!theme plain
+
+package "MVRP" {
+    interface "IObservable<T>" as IObservable
+    class ReactiveProperty {
+        +Value: T
+    }
+    
+    class GameModel {
+        +Score: ReactiveProperty<int>
+        +AddScore(value: int)
+    }
+    
+    class GameView {
+        +AddScoreButton: Button
+        +ScoreText: Text
+        +SetUp(scoreObservable: IObservable<int>)
+    }
+    
+    class GamePresenter {
+        -model: GameModel
+        -view: GameView
+        +GamePresenter(model: GameModel, view: GameView)
+    }
+
+    class UIManager {
+        +Initialize()
+    }
+}
+
+class GameManager {
+    +Initialize()
+}
+
+GameManager --> UIManager : Uses
+
+
+GameModel --> IObservable : Implements
+GameView --> IObservable : Uses
+GamePresenter --> GameModel : Uses
+GamePresenter --> GameView : Initializes
+UIManager --> GameView : Creates
+UIManager --> GamePresenter : Creates
+
+
+@enduml
