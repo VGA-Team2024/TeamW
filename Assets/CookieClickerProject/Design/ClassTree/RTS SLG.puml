@@ -1,0 +1,66 @@
+@startuml
+package "ドメイン層" {
+    class GameManager {
+        +CurrentGold: int
+        +EnemyForce: int
+        +AddGold(amount: int): void
+        +SpendGold(amount: int): void
+        +StartWar(): void
+    }
+    
+    class ResourceController {
+        -goldPerSecond: int
+    }
+    
+    class UnitManager {
+        +CreateSoldier(): void
+        +CreateWorker(): void
+    }
+    
+    class ConstructionManager {
+        +ConstructBuilding(buildingPrefab: GameObject, position: Vector3): void
+    }
+}
+package "MVRP" {
+    class UIManager {
+        -goldText: Text
+        +OnBuildButtonClicked(): void
+        +OnWarButtonClicked(): void
+    }
+}
+package "データアクセス層" {
+    class DataStorage {
+        +loadGame()
+        +saveGame() 
+    }
+    class PlayerData {
+        +gold: int
+    }
+    class GameData {
+        +time: int
+        +weave: int
+    }
+   
+    class FactoryData {
+        +producers: Producer[]
+        +upgrades: Upgrade[]
+    }
+    class WarPotential{
+        +warPotential: int
+    }
+}
+
+UIManager --> GameManager : <<uses>>
+
+GameManager --> ResourceController : <<uses>>
+GameManager --> UnitManager : <<uses>>
+GameManager --> ConstructionManager : <<uses>>
+
+
+
+DataStorage --> PlayerData : <<uses>>
+DataStorage --> GameData : <<uses>>
+DataStorage --> FactoryData : <<uses>>
+DataStorage --> WarPotential : <<uses>>
+
+@enduml

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+
 namespace CookieClickerProject.Common
 {
     /// <summary>
@@ -14,37 +15,76 @@ namespace CookieClickerProject.Common
         {
             get
             {
+                // 既存のインスタンスが存在しない場合、シーン内から検索
                 if (_instance == null)
                 {
                     _instance = FindObjectOfType<T>();
+
+                    // 既存のインスタンスが存在しない場合、新しいGameObjectを作成してコンポーネントをアタッチ
                     if (_instance == null)
                     {
+                        // 既存のインスタンスが存在しない場合、新しいGameObjectを作成してコンポーネントをアタッチ
                         GameObject singletonObject = new GameObject();
                         _instance = singletonObject.AddComponent<T>();
                         singletonObject.name = typeof(T).ToString();
-                        DontDestroyOnLoad(singletonObject);
+
+                        // 継承先でDontDestroyOnLoadを使用するかどうかの判断
+                        AbstractSingleton<T> singleton = _instance as AbstractSingleton<T>;
+                        if (singleton != null && singleton.UseDontDestroyOnLoad)
+                        {
+                            DontDestroyOnLoad(singletonObject);
+                        }
                     }
                 }
+
                 return _instance;
             }
         }
 
-        protected virtual void Awake()
+        private void Awake()
         {
-            if (_instance == null)
+            if (_instance != null && _instance != this)
             {
-                _instance = this as T;
+                // 既存のインスタンスが存在し、かつ自身が既存のインスタンスでない場合、自身を破棄
+                Destroy(gameObject);
+                return;
+            }
+
+            // 自身をシングルトンのインスタンスとして設定
+            _instance = this as T;
+
+            // 継承先でDontDestroyOnLoadを使用するかどうかの判断
+            if (UseDontDestroyOnLoad)
+            {
                 DontDestroyOnLoad(gameObject);
             }
-            else
-            {
-                Destroy(gameObject);
-            }
+
             OnAwake();
         }
+
         /// <summary>
         /// 継承先でAwakeが必要な場合
         /// </summary>
-        protected virtual void OnAwake() { }
+        protected virtual void OnAwake()
+        {
+        }
+
+        /// <summary>
+        /// 継承先でDontDestroyOnLoadを使用するかどうかを制御します。
+        /// </summary>
+        protected virtual bool UseDontDestroyOnLoad => false;
+
+        private void OnDestroy()
+        {
+            if (_instance == this)
+            {
+                OnDestroyed();
+                _instance = null;
+            }
+        }
+
+        protected virtual void OnDestroyed()
+        {
+        }
     }
 }
