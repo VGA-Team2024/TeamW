@@ -15,15 +15,17 @@ namespace CookieClickerProject.Common
 
         // イベントの定義
         public event Action OnButtonDown;
+
         public event Action OnButtonUp;
+
         // 自作のクリックイベントを定義
         [Serializable]
         public class ButtonClickEvent : UnityEvent<InputUIButton>
         {
         }
 
-        [FormerlySerializedAs("OnClick")] public ButtonClickEvent onClick;
-    
+        public ButtonClickEvent OnClick;
+
         private void Start()
         {
             _button = GetComponent<CanvasGroup>();
@@ -47,7 +49,7 @@ namespace CookieClickerProject.Common
             // イベントの発火
             OnButtonUp?.Invoke();
             // クリックイベントの発火
-            onClick?.Invoke(this);
+            OnClick?.Invoke(this);
         }
     }
 }

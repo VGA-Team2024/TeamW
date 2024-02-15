@@ -60,9 +60,8 @@ crashlytics-build.properties
 
 .idea/
 .vs/
+.vsconfig
 .AssetStoreTools/
-UserSettings/Layouts/
 UserSettings/
 Assets/Plugins/
 Assets/CRIMW/
-.vsconfig

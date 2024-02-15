@@ -15,7 +15,11 @@ public class Resource : MonoBehaviour
     /// <summary> 一回のクリックで作られるリソースの数 </summary>
     [SerializeField] private int _resourcesPerClick;
 
-    public decimal TotalClicks { set => _totalClicks = value; }
+    public decimal TotalClicks
+    {
+        get => _totalClicks;
+        set => _totalClicks = value;
+    }
 
     void Awake()
     {
@@ -36,7 +40,7 @@ public class Resource : MonoBehaviour
     /// <summary>
     /// クリックするごとにリソースの総数が増えるメソッド
     /// </summary>
-    public void ProduceResource() => _totalResources += _resourcesPerClick;
+    public void ProduceResource(decimal resources) => _totalResources += resources;
 
     /// <summary>
     /// 一秒ごとに_resourcesCreatedPerSecondの分リソースが増えるコルーチン
