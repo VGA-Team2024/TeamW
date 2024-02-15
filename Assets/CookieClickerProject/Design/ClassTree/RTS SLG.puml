@@ -6,10 +6,13 @@ package "ドメイン層" {
         +AddGold(amount: int): void
         +SpendGold(amount: int): void
         +StartWar(): void
+        +LoadGame(): void
+        +SaveGame(): void
     }
     
     class ResourceController {
-        -goldPerSecond: int
+        +goldPerSecond: int
+        +GenerateGold(): void
     }
     
     class UnitManager {
@@ -18,49 +21,181 @@ package "ドメイン層" {
     }
     
     class ConstructionManager {
-        +ConstructBuilding(buildingPrefab: GameObject, position: Vector3): void
+        +ConstructBuilding(buildingType: String, position: Vector3): void
+    }
+    
+    class WarManager {
+        +currentWave: int
+        +StartWave(): void
+        +EndWave(): void
     }
 }
-package "MVRP" {
+
+
+
+package "プレゼンテーション層" {
     class UIManager {
         -goldText: Text
+        +UpdateGoldDisplay(goldAmount: int): void
         +OnBuildButtonClicked(): void
         +OnWarButtonClicked(): void
     }
+    class UIManager {
+        +Initialize()
+    }
+    class PlayerView {
+    }
+    class PlayerPresenter {
+        +UpdateView()
+        +HandleInput()
+    }
+    class ResourceView {
+    }
+    class ResourcePresenter {
+        +UpdateView()
+        +HandleInput()
+    }
+    class UnitView {
+    }
+    class UnitPresenter {
+        +UpdateView()
+        +HandleInput()
+    }
+    class ConstructionView {
+    }
+    class ConstructionPresenter {
+        +UpdateView()
+        +HandleInput()
+    }
+    class WarView {
+    }
+    class WarPresenter {
+        +UpdateView()
+        +HandleInput()
+    }
 }
+
+
 package "データアクセス層" {
     class DataStorage {
-        +loadGame()
-        +saveGame() 
+        +LoadGame(): void
+        +SaveGame(): void 
     }
     class PlayerData {
         +gold: int
     }
     class GameData {
-        +time: int
-        +weave: int
+        +enemyForce: int
+        +currentWave: int
     }
-   
-    class FactoryData {
-        +producers: Producer[]
-        +upgrades: Upgrade[]
-    }
-    class WarPotential{
-        +warPotential: int
+    class BuildingData {
+        +type: String
+        +position: Vector3
+        +isConstructed: boolean
     }
 }
 
-UIManager --> GameManager : <<uses>>
+UIManager -down-> GameManager : <<uses>>
 
 GameManager --> ResourceController : <<uses>>
 GameManager --> UnitManager : <<uses>>
 GameManager --> ConstructionManager : <<uses>>
+GameManager --> WarManager : <<uses>>
 
-
-
+GameManager --> DataStorage : <<uses>>
 DataStorage --> PlayerData : <<uses>>
 DataStorage --> GameData : <<uses>>
-DataStorage --> FactoryData : <<uses>>
-DataStorage --> WarPotential : <<uses>>
+DataStorage --> BuildingData : <<uses>>
 
+UIManager .down.> PlayerPresenter : <<initializes>>
+UIManager .down.> ResourcePresenter : <<initializes>>
+UIManager .down.> UnitPresenter : <<initializes>>
+UIManager .down.> ConstructionPresenter : <<initializes>>
+UIManager .down.> WarPresenter : <<initializes>>
+
+PlayerPresenter .down.> PlayerView : <<updates>>
+ResourcePresenter .down.> ResourceView : <<updates>>
+UnitPresenter .down.> UnitView : <<updates>>
+ConstructionPresenter .down.> ConstructionView : <<updates>>
+WarPresenter .down.> WarView : <<updates>>
+
+ResourcePresenter -down-> ResourceController : <<uses>>
+UnitPresenter -down-> UnitManager : <<uses>>
+WarPresenter -down-> WarManager : <<uses>>
+ConstructionPresenter -down-> ConstructionManager : <<uses>>
+
+package "詳細"{
+    interface IResource {
+        +Generate(): void
+    }
+    
+    interface IUnit {
+        +Move(): void
+        +Action(): void
+    }
+    
+    interface IConstruction {
+        +Build(): void
+        +Effect(): void
+    }
+    
+    interface IWar {
+        +StartWave(): void
+        +EndWave(): void
+    }
+    
+    abstract class UnitBase {
+        +Move(): void
+        +Action(): void
+    }
+    
+    abstract class ConstructionBase {
+        +Build(): void
+        +Effect(): void
+    }
+    
+    class Soldier extends UnitBase {
+        +Action(): void
+    }
+    
+    class Worker extends UnitBase {
+        +Action(): void
+    }
+    
+    class Camp extends ConstructionBase {
+        +Effect(): void
+    }
+    
+    class Barracks extends ConstructionBase {
+        +Effect(): void
+    }
+    
+    class UnitFactory {
+        +CreateUnit(type: String): IUnit
+    }
+    
+    class ConstructionFactory {
+        +CreateConstruction(type: String): IConstruction
+    }
+}
+UnitBase <|.. Soldier
+UnitBase <|.. Worker
+ConstructionBase <|.. Camp
+ConstructionBase <|.. Barracks
+
+IUnit <|.. UnitBase
+IConstruction <|.. ConstructionBase
+
+UnitFactory ..> IUnit : <<creates>>
+ConstructionFactory ..> IConstruction : <<creates>>
+
+ConstructionManager --> ConstructionFactory : <<uses>>
+UnitManager --> UnitFactory : <<uses>>
+
+ResourceController --> IResource : <<implements>>
+WarManager --> IWar : <<implements>>
+
+
+' MVPパターンとレイヤーアーキテクチャの設計を組み合わせることはできない、
+' レイヤーアーキテクチャを軸に、MVPパターンを各レイヤーに適用することができる
 @enduml
