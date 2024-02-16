@@ -166,7 +166,7 @@ namespace CookieClickerProject.Common
 
 
         /// <summary>CriAtom の追加。acb追加</summary>
-        private void Awake()
+        protected override void OnAwake()
         {
             _bgmPlayer = new CriAtomExPlayer();
             _sePlayer = new CriAtomExPlayer();
