@@ -14,11 +14,6 @@ public class UnitManager : AbstractSingleton<UnitManager>
     [Header("キャンプの数"), SerializeField] [Tooltip("キャンプの数")]
     int _numberOfCamps; // 取得する必要アリ
 
-    [Header("工員のプレハブ"), SerializeField] [Tooltip("工員のプレハブ")]
-    GameObject _workersPrefab;
-
-    [Header("兵士のプレハブ"), SerializeField] [Tooltip("兵士のプレハブ")]
-    GameObject _soldiersPrefab;
 
     //[Header("工員のリスト"),SerializeField] 
     [Tooltip("工員のリスト")] List<GameObject> _listOfWorkers;
@@ -80,7 +75,9 @@ public class UnitManager : AbstractSingleton<UnitManager>
     /// </summary>
     public void CreateWorker()
     {
-        _unitFactory.CreateUnit("Worker", CurrentNumberOfWorkers, _workersPrefab, _listOfWorkers);
+        var worker = _unitFactory.CreateUnit("Worker", _listOfWorkers);
+        // 追加の工員管理ロジックが必要
+        CurrentNumberOfWorkers = _listOfWorkers.Count;
     }
 
     /// <summary>
@@ -90,7 +87,15 @@ public class UnitManager : AbstractSingleton<UnitManager>
     /// </summary>
     public void CreateSoldier()
     {
-        // これでOK？　マネージャーは変数以外何も持たせない感じ？
-        _unitFactory.CreateUnit("Soldier", CurrentNumberOfSoldiers, _soldiersPrefab, _listOfSoldiers);
+        if (_currentNumberOfSoldiers < _currentMaxNumberOfSoldiers)
+        {
+            var soldier = _unitFactory.CreateUnit("Soldier", _listOfSoldiers);
+            // 追加の兵士管理ロジックが必要
+            CurrentNumberOfSoldiers = _listOfSoldiers.Count;
+        }
+        else
+        {
+            Debug.LogWarning("Cannot create more soldiers. Max capacity reached.");
+        }
     }
 }

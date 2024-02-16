@@ -8,45 +8,42 @@ using UnityEngine;
 /// </summary>
 public class UnitFactory : MonoBehaviour
 {
-    UnitManager _unitManager;
+    [Header("工員のプレハブ"), SerializeField] [Tooltip("工員のプレハブ")]
+    private GameObject _workersPrefab;
 
-    void Start()
-    {
-        _unitManager = UnitManager.Instance;
-    }
+    [Header("兵士のプレハブ"), SerializeField] [Tooltip("兵士のプレハブ")]
+    private GameObject _soldiersPrefab;
 
-    void Update()
-    {
-    }
 
-    public IUnit CreateUnit(String type, int numberOfSoldiers, GameObject prefab, List<GameObject> list)
+    // ユニットを生成するメソッド 戻り値：IUnit
+    public IUnit CreateUnit(string type, List<GameObject> list)
     {
-        if (type == "Soldier")
+        GameObject prefab = null;
+        switch (type)
         {
-            if (numberOfSoldiers < _unitManager.CurrentMaxNumberOfSoldiers)
-            {
-                // 作成する
-                var go = Instantiate(prefab);
-                list.Add(go);
-                numberOfSoldiers = list.Count;
-                //numberOfSoldiers:割り当てられた値は、どの実行パスでも使用されない
-            }
-            else
-            {
-                Debug.LogWarning($"現在、兵士の作成できる上限数を超えています。 " +
-                                 $"\n  兵士の数：{numberOfSoldiers}  兵士の作成上限数：{_unitManager.CurrentMaxNumberOfSoldiers}");
-            }
-        }
-        else if (type == "Worker")
-        {
-            // 作成する
-            var go = Instantiate(prefab);
-            list.Add(go);
-            numberOfSoldiers = list.Count;
-            //numberOfSoldiers:割り当てられた値は、どの実行パスでも使用されない
+            case "Soldier":
+                prefab = _soldiersPrefab;
+                break;
+            case "Worker":
+                prefab = _workersPrefab;
+                break;
+            default:
+                Debug.LogError($"Unknown unit type: {type}");
+                return null;
         }
 
-        return null; 
-        //return IUnit; // どうやって書くのぉぉぉ;
+        var go = Instantiate(prefab);
+        list.Add(go);
+
+        var unitComponent = go.GetComponent<IUnit>();
+        if (unitComponent != null)
+        {
+            return unitComponent;
+        }
+        else
+        {
+            Debug.LogError($"Prefab does not have an IUnit component: {type}");
+            return null;
+        }
     }
 }
