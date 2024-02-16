@@ -195,7 +195,4 @@ UnitManager --> UnitFactory : <<uses>>
 ResourceController --> IResource : <<implements>>
 WarManager --> IWar : <<implements>>
 
-
-' MVPパターンとレイヤーアーキテクチャの設計を組み合わせることはできない、
-' レイヤーアーキテクチャを軸に、MVPパターンを各レイヤーに適用することができる
 @enduml
