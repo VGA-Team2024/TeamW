@@ -63,7 +63,7 @@ public class WarManager : MonoBehaviour, IWar
     /// NEXTに表示されている兵力 vs 自分が持っている兵士の数(兵力)
     /// 自分の兵力が高ければ 戦争に勝利 
     /// </summary>
-    /// <returns></returns>
+    /// <returns> 勝ったら真、負けたら偽 </returns>
     bool Comparison()
     {
         if (_myForce >= _enemyForce)
