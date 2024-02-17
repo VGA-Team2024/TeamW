@@ -1,10 +1,13 @@
+using System.Collections.Generic;
+using System.Linq;
+using CookieClickerProject.Common;
 using UnityEngine;
 
 /// <summary>
 /// 戦争の機能を持つ
 /// ウェーブ：NEXT
 /// </summary>
-public class WarManager : MonoBehaviour, IWar
+public class WarManager : AbstractSingleton<WarManager>, IWar
 {
     [Header("現在のウェーブ"), SerializeField] [Tooltip("現在のウェーブ")]
     int _currentWave;
@@ -21,6 +24,8 @@ public class WarManager : MonoBehaviour, IWar
     [Header("現在のゴールド"), SerializeField] [Tooltip("現在のゴールド")]
     int _gold;
 
+    [Header("IResourceを継承したもののリスト"), SerializeField] [Tooltip("IResourceを継承したもののリスト")]
+    List<Component> _iResource;
 
     #region プロパティ
 
@@ -42,6 +47,7 @@ public class WarManager : MonoBehaviour, IWar
 
     void Start()
     {
+        _iResource = new List<Component>();
     }
 
     void Update()
@@ -95,6 +101,7 @@ public class WarManager : MonoBehaviour, IWar
             // 負けたら
             _myForce = 0;
             _gold -= (_enemyForce - _myForce) * 10;
+            // ReduceFacilityGold();  // 施設の貯蓄したゴールドを０にする
         }
 
         if (_gold < 0)
@@ -102,4 +109,29 @@ public class WarManager : MonoBehaviour, IWar
             _gold = 0;
         }
     }
+
+// 必要なこと
+// ・施設側で「IResource」を継承していること
+// ・貯蓄されたゴールドの数が代入された変数がアクセスできること
+
+    /// <summary>
+    /// 「IResource」を継承した、施設（鉱山）の貯蓄したゴールドを０にする
+    /// </summary>
+     // void ReduceFacilityGold()
+     // {
+     //     _iResource.Clear();
+     //     _iResource = GetComponents(typeof(IResource)).ToList();
+     //
+     //     foreach (IResource item in _iResource)
+     //     {
+     //         // 変数にアクセスして、値を０にする
+     //         item.Gold = 0;
+     //     }
+     // }
 }
+
+// // あくまでもイメージした仮置きのインターフェース
+// public interface IResource
+// {
+//     public int Gold { get; set; }
+// }
