@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class GoldMine : MonoBehaviour
 {
-    int CurrentGold = 0;
+   public int CurrentGold = 0;
     int MaxGold = 10000;
     [SerializeField] int GoldPlus = 10;
     float _timer = 0;
@@ -35,6 +35,8 @@ public class GoldMine : MonoBehaviour
     private void OnMouseDown()
     {
         Debug.Log("‰ñû");
+        // Gold‚Ì‡Œv•Ï”‚É{‚·‚éG
+        CurrentGold = 0;
     }
    
 }
