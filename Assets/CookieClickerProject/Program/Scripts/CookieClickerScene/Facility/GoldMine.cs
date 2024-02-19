@@ -7,12 +7,17 @@ using UnityEngine.UI;
 
 public class GoldMine : MonoBehaviour
 {
-    private int _currentGold = 0;
-    private readonly int _maxGold = 10000;
-    [FormerlySerializedAs("GoldPlus")] [SerializeField] private int _goldPlus = 10;
-    private float _timer = 0;
-    private readonly int _timePlus = 1;
-    private Text _goldText = null;
+
+   public int CurrentGold = 0;
+    int MaxGold = 10000;
+    [SerializeField] int GoldPlus = 10;
+    int _timePlus = 1;
+    Text _GoldText = null;
+    int _currentGold = 0;
+    int _maxGold = 10000;
+    [SerializeField]  int _goldPlus = 10;
+    float _timer = 0;
+    Text _goldText = null;
 
     private void Start()
     {
@@ -35,6 +40,9 @@ public class GoldMine : MonoBehaviour
 
     private void OnMouseDown()
     {
-        Debug.Log("å›å");
+
+        Debug.Log("‰ñû");
+        // Gold‚Ì‡Œv•Ï”‚É{‚·‚é
+        _currentGold = 0;
     }
 }
