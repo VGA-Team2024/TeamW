@@ -5,6 +5,8 @@ using UnityEngine;
 /// マップを適当に徘徊してもよい。
 /// 価格：１００G　作成上限数：キャンプの数*50
 /// </summary>
+[CreateAssetMenu(fileName = "Soldier", menuName = "ScriptableObjects/Unit/Soldier")]
+[System.Serializable]
 public class Soldier : UnitBase
 {
     void Start()
