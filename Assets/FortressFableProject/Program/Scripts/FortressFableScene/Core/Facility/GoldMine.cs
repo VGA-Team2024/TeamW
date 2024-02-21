@@ -5,44 +5,10 @@ using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public class GoldMine : MonoBehaviour
+[CreateAssetMenu(fileName = "GoldMine", menuName = "ScriptableObjects/Facility/GoldMine")]
+[System.Serializable]
+public class GoldMine : FacilityBase
 {
-
-   public int CurrentGold = 0;
-    int MaxGold = 10000;
-    [SerializeField] int GoldPlus = 10;
-    int _timePlus = 1;
-    Text _GoldText = null;
-    int _currentGold = 0;
-    int _maxGold = 10000;
-    [SerializeField]  int _goldPlus = 10;
-    float _timer = 0;
-    Text _goldText = null;
-
-    private void Start()
-    {
-        _goldText = GetComponent<Text>();
-    }
-
-    private void Update()
-    {
-        _timer += Time.deltaTime;
-        if (_timer < _timePlus && _currentGold > _maxGold)
-        {
-            _currentGold += _goldPlus;
-            _timer = 0;
-        }
-        else
-        {
-            _timer = 0;
-        }
-    }
-
-    private void OnMouseDown()
-    {
-
-        Debug.Log("回収");
-        // Goldの合計変数に＋＝する
-        _currentGold = 0;
-    }
+    public int currentGold = 0; // 現在の金量
+    public int maxGold = 10000; // 最大金量
 }

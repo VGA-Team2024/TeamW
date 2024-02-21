@@ -2,10 +2,11 @@
 
 
 [System.Serializable]
-public class FacilityBase
+public class FacilityBase : ScriptableObject
 {
-    public UnitBase.FacilityType type;
-    public bool boo;
-    public Vector3 position;
-    public float productionTime;
+    public UnitBase.FacilityType type; // 施設の種類
+    public bool boo; // 施設が建設されているかどうか
+    public Vector3 position; //施設の位置
+    public float timePerProduction; //Tの生産時間
+    public int assetPerProduction; //Tの生産量
 }
