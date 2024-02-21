@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8f9e99ea6e7091418a2fad12965c57e, type: 3}
   m_Name: GoldMine
   m_EditorClassIdentifier: 
-  type: 0
+  type: 1
   boo: 0
   position: {x: 0, y: 0, z: 0}
-  productionTime: 0
-  producingGold: 0
-  GoldPlus: 10
-  _goldPlus: 10
+  timePerProduction: 10
+  assetPerProduction: 10
+  currentGold: 0
+  maxGold: 10000
