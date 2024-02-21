@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Soldiers : MonoBehaviour
+public class youseizyo: MonoBehaviour
 {
     int _IncreaseSoldiers = 1;
     int _Dexresesgold = 100;
