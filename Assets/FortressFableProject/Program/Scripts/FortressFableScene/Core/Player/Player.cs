@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
 {
     private void Start()
     {
-        //UniRx‚ÅClick‚µ‚½‚Æ‚«‚ÉŒÄ‚Ño‚·
+        //UniRxã§Clickã—ãŸã¨ãã«å‘¼ã³å‡ºã™
         //Observable.EveryUpdate()
         //    .Where(_ => Input.GetMouseButtonDown(0))
         //    .Subscribe(_ => handleClick());
