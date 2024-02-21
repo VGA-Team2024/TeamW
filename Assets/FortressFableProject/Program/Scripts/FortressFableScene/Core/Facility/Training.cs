@@ -2,9 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Soldiers : MonoBehaviour
+[CreateAssetMenu(fileName = "Soldiers", menuName = "ScriptableObjects/Facility/Soldiers")]
+[System.Serializable]
+public class Training : FacilityBase
 {
-    int _IncreaseSoldiers = 1;
+    public int producingSoldiers; // 養成所で生産中の兵士 
     int _Dexresesgold = 100;
 
     private void OnMouseDown()

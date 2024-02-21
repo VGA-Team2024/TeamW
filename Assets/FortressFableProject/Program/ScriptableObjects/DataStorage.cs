@@ -1,31 +1,37 @@
 ﻿using System;
 using System.IO;
+using CookieClickerProject.Data;
 using UnityEngine;
+
+[System.Serializable]
+public class SaveData
+{
+    public PlayerData playerData;
+    public GameData gameData;
+}
 
 namespace CookieClickerProject.Data
 {
-    public class DataStorage : MonoBehaviour
+    public class DataStorage : ScriptableObject
     {
-        private PlayerData _playerData;
+        public PlayerData playerData;
+        public GameData gameData;
 
-        private void Awake()
+        private void OnEnable()
         {
-            _playerData = ScriptableObject.CreateInstance<PlayerData>();
+            playerData = ScriptableObject.CreateInstance<PlayerData>();
+            gameData = ScriptableObject.CreateInstance<GameData>();
             LoadGame();
         }
 
-        public void ResetGame()
-        {
-            _playerData.TotalCookies = 0;
-            _playerData.CookiesPerClick = 1;
-            _playerData.CookiesPerSecond = 0;
-        }
-
-
-        // 今後必要になるかもしれないセーブとロード
         public void SaveGame()
         {
-            string data = JsonUtility.ToJson(_playerData, true);
+            SaveData saveData = new SaveData
+            {
+                playerData = this.playerData,
+                gameData = this.gameData
+            };
+            string data = JsonUtility.ToJson(saveData, true);
             string filePath = Path.Combine(Application.persistentDataPath, "gameSave.json");
             File.WriteAllText(filePath, data);
         }
@@ -36,9 +42,10 @@ namespace CookieClickerProject.Data
             if (File.Exists(filePath))
             {
                 string data = File.ReadAllText(filePath);
-                JsonUtility.FromJsonOverwrite(data, _playerData);
+                SaveData saveData = JsonUtility.FromJson<SaveData>(data);
+                JsonUtility.FromJsonOverwrite(JsonUtility.ToJson(saveData.playerData), playerData);
+                JsonUtility.FromJsonOverwrite(JsonUtility.ToJson(saveData.gameData), gameData);
             }
         }
-
     }
 }

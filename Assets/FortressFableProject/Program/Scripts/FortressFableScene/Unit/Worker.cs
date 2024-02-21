@@ -6,6 +6,8 @@ using UnityEngine;
 /// 施設の建設時に建設予定地に移動し、建物を建設する。
 /// マップを適当に徘徊してもよい。
 /// </summary>
+[CreateAssetMenu(fileName = "Worker", menuName = "ScriptableObjects/Unit/Worker")]
+[System.Serializable]
 public class Worker : UnitBase
 {
     void Start()
