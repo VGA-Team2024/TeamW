@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace CookieClickerProject.Data
 {
     [Serializable]
-    public class GameData
+    public class GameData : ScriptableObject
     {
         public List<Upgrade> availableUpgrades;
         public List<Producer> availableProducers;

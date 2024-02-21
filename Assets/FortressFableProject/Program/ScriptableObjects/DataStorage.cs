@@ -4,21 +4,21 @@ using UnityEngine;
 
 namespace CookieClickerProject.Data
 {
-    public class DataStorage : MonoBehaviour
+    public class DataStorage : ScriptableObject
     {
         private PlayerData _playerData;
+        private GameData _gameData;
 
         private void Awake()
         {
             _playerData = ScriptableObject.CreateInstance<PlayerData>();
+            _gameData = ScriptableObject.CreateInstance<GameData>();
             LoadGame();
         }
 
         public void ResetGame()
         {
-            _playerData.TotalCookies = 0;
-            _playerData.CookiesPerClick = 1;
-            _playerData.CookiesPerSecond = 0;
+            
         }
 
 
