@@ -7,65 +7,90 @@ using UnityEngine;
 
 namespace FortressFableProject.Program.Scripts.Common.Core
 {
-    public class GameManager : MonoBehaviour
+    public class GameManager : AbstractSingleton<GameManager>
     {
+        protected override bool UseDontDestroyOnLoad => true;
         private SaveAndLoad _saveAndLoad;
 
         private void Awake()
         {
-            _saveAndLoad = new SaveAndLoad();
+            _saveAndLoad = SaveAndLoad.Instance;
+            _saveAndLoad.LoadGame();
+            AddUnit(new Soldier { Type = UnitBase.UnitType.Soldier, Count = 1 });
+            AddUnit(new Soldier { Type = UnitBase.UnitType.Soldier, Count = 1 });
+
+            _saveAndLoad.SaveGame();
         }
 
-        public void AddUnit(UnitBase.UnitType unitType, int count)
+        
+        
+        
+        /// <summary>
+        /// ユニットを追加
+        /// </summary>
+        /// <param name="unit"></param>
+        public void AddUnit(UnitBase unit)
         {
-            var unit = _saveAndLoad.StorageData.GameData.Units.FirstOrDefault(u => u.Type == unitType);
+            var unitData = _saveAndLoad.StorageData.GameData.Units.FirstOrDefault(u => u.Type == unit.Type);
 
-            if (unit != null)
+            if (unitData != null)
             {
-                unit.Count += count;
+                unitData.Count += unit.Count;
             }
             else
             {
-                unit = CreateUnit(unitType);
-                unit.Count = count;
-                _saveAndLoad.StorageData.GameData.Units.Add(unit);
+                unitData = new UnitData
+                {
+                    Type = unit.Type,
+                    Count = unit.Count
+                };
+                _saveAndLoad.StorageData.GameData.Units.Add(unitData);
             }
         }
 
-        private UnitBase CreateUnit(UnitBase.UnitType unitType)
+        public void AddFacility(FacilityBase facility)
         {
-            switch (unitType)
+            var facilityData = new FacilityData
             {
-                case UnitBase.UnitType.Soldier:
-                    return gameObject.AddComponent<Soldier>();
-                case UnitBase.UnitType.Worker:
-                    return gameObject.AddComponent<Worker>();
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(unitType), unitType, "Unsupported unit type.");
-            }
-        }
-
-        public void AddFacility(FacilityBase.FacilityType facilityType)
-        {
-            FacilityBase facility = facilityType switch
-            {
-                FacilityBase.FacilityType.Mine => gameObject.AddComponent<GoldMine>(),
-                FacilityBase.FacilityType.TrainingFacility => gameObject.AddComponent<Training>(),
-                _ => throw new ArgumentOutOfRangeException(nameof(facilityType), facilityType,
-                    "Unsupported facility type.")
+                Type = facility.Type,
+                IsProducing = facility.IsProducing,
+                Position = facility.transform.position,
+                WaitTime = facility.WaitTime,
+                TimePerProduction = facility.TimePerProduction,
+                AssetPerProduction = facility.AssetPerProduction
             };
 
-            _saveAndLoad.StorageData.GameData.Facilities.Add(facility);
+            _saveAndLoad.StorageData.GameData.Facilities.Add(facilityData);
         }
 
         public void AddWave()
         {
             _saveAndLoad.StorageData.GameData.Wave++;
         }
-        
+
         public void AddMoney(int money)
         {
             _saveAndLoad.StorageData.PlayerData.TotalMoney += money;
+        }
+
+        // ここから下は、実際にゲームオブジェクトを生成するロジックを実装します。
+        private void LoadGame()
+        {
+            _saveAndLoad.LoadGame(); // セーブデータのロード
+
+            // ユニットの復元
+            foreach (var unitData in _saveAndLoad.StorageData.GameData.Units)
+            {
+                // ここで、実際にユニットのゲームオブジェクトを生成するロジックを実装します。
+                // 例: CreateUnitGameObject(unitData);
+            }
+
+            // 施設の復元
+            foreach (var facilityData in _saveAndLoad.StorageData.GameData.Facilities)
+            {
+                // ここで、実際に施設のゲームオブジェクトを生成するロジックを実装します。
+                // 例: CreateFacilityGameObject(facilityData);
+            }
         }
     }
 }

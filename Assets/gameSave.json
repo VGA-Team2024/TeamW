@@ -1,0 +1,15 @@
+{
+    "PlayerData": {
+        "TotalMoney": 0
+    },
+    "GameData": {
+        "Units": [
+            {
+                "Type": 1,
+                "Count": 4
+            }
+        ],
+        "Facilities": [],
+        "Wave": 0
+    }
+}
