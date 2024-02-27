@@ -8,6 +8,7 @@ public abstract class UnitBase : MonoBehaviour, IUnit
 
     public enum UnitType
     {
+        Base,
         Worker,
         Soldier,
         Tank
