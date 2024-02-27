@@ -1,15 +1,16 @@
 using UnityEngine;
 
 [System.Serializable]
-public abstract class UnitBase : ScriptableObject, IUnit
+public abstract class UnitBase : MonoBehaviour, IUnit
 {
-    public int count;
-    public enum FacilityType
+    public UnitType Type { get; set; } //ユニットの種類
+    public int Count { get; set; } //ユニットの数
+
+    public enum UnitType
     {
-        Base,
-        Mine,
-        TrainingFacility,
-        Camp
+        Worker,
+        Soldier,
+        Tank
     }
 
     public abstract void Move();
