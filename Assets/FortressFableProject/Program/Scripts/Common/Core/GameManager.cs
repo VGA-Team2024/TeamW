@@ -62,5 +62,10 @@ namespace FortressFableProject.Program.Scripts.Common.Core
         {
             _saveAndLoad.StorageData.GameData.Wave++;
         }
+        
+        public void AddMoney(int money)
+        {
+            _saveAndLoad.StorageData.PlayerData.TotalMoney += money;
+        }
     }
 }
