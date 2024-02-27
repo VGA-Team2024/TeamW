@@ -48,7 +48,7 @@ namespace CookieClickerProject.Common
                 GameData = this.GameData
             };
             string data = JsonUtility.ToJson(storageData, true);
-            string filePath = Path.Combine(Application.persistentDataPath, "gameSave.json");
+            string filePath = Path.Combine(Application.dataPath, "gameSave.json");
             File.WriteAllText(filePath, data);
         }
 
@@ -57,7 +57,7 @@ namespace CookieClickerProject.Common
         /// </summary>
         public void LoadGame()
         {
-            string filePath = Path.Combine(Application.persistentDataPath, "gameSave.json");
+            string filePath = Path.Combine(Application.dataPath, "gameSave.json");
             if (File.Exists(filePath))
             {
                 // ファイルが存在する場合、セーブデータをロード

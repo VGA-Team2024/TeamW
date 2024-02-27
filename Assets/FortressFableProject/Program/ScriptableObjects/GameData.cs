@@ -2,10 +2,12 @@
 
 namespace CookieClickerProject.Data
 {
+    [System.Serializable]
     public class GameData
     {
-        public readonly List<UnitBase> Units = new();
-        public readonly List<FacilityBase> Facilities = new ();
+        public List<UnitData> Units = new List<UnitData>();
+        public List<FacilityData> Facilities = new List<FacilityData>();
         public int Wave = 0;
     }
+
 }
