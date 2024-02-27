@@ -1,3 +1,5 @@
+using CookieClickerProject.Common;
+using FortressFableProject.Program.Scripts.Common.Core;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,7 +24,7 @@ public class FucilitySelectButton : MonoBehaviour
 
     public void OnClick(string facilityName)
     {
-        if (/*GOLD.Instance.Gold >= _price && ‚¨‹à‚ª‚ ‚é‚©Šm”F‚·‚éˆ—‚ð‘‚­*/ConstructionCheck(facilityName))
+        if (SaveAndLoad.Instance.StorageData.PlayerData.TotalMoney >= _price && ConstructionCheck(facilityName))
         {
             ConstructionManager.Instance.SelectFacilityPriceAndName(_price, facilityName);
             _isBuyEvent.Invoke();

@@ -1,4 +1,4 @@
-using CookieClickerProject.Common;
+ï»¿using CookieClickerProject.Common;
 using FortressFableProject.Program.Scripts.Common.Core;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,8 +8,8 @@ using UnityEngine.EventSystems;
 
 public class ConstructionManager : AbstractSingleton<ConstructionManager>
 {
-    [SerializeField, Tooltip("ƒ|ƒWƒVƒ‡ƒ“ƒZƒbƒg—pƒvƒŒƒnƒu")] GameObject[] _factoryPosSetPrefab;
-    [SerializeField, Tooltip("‚¢‚­‚Âì‚ê‚é‚©ƒNƒ‰ƒX‚ÌƒŠƒXƒg")] List<FacilityCount> _maxFaciCount;
+    [SerializeField, Tooltip("ãƒã‚¸ã‚·ãƒ§ãƒ³ã‚»ãƒƒãƒˆç”¨ãƒ—ãƒ¬ãƒãƒ–")] GameObject[] _factoryPosSetPrefab;
+    [SerializeField, Tooltip("ã„ãã¤ä½œã‚Œã‚‹ã‹ã‚¯ãƒ©ã‚¹ã®ãƒªã‚¹ãƒˆ")] List<FacilityCount> _maxFaciCount;
     public List<FacilityCount> MaxFaciCount { get { return _maxFaciCount; } set { _maxFaciCount = value; } }
 
     [SerializeField] EventSystem _es;
@@ -17,12 +17,12 @@ public class ConstructionManager : AbstractSingleton<ConstructionManager>
     GameObject _blueSheet = null;
     public GameObject BlueSheet { get { return _blueSheet; } set { _blueSheet = value; } }
     GameObject _factoryPosSet;
-    [SerializeField, Tooltip("Œšİ‚Å‚«‚é‚Æ‚«‚Ìƒ{ƒ^ƒ“‚Ìˆ—")] UnityEvent _isSetButton;
+    [SerializeField, Tooltip("å»ºè¨­ã§ãã‚‹ã¨ãã®ãƒœã‚¿ãƒ³ã®å‡¦ç†")] UnityEvent _isSetButton;
     int _selectFacilityPrice;
     string _selectFacilityName;
 
-    /// <summary>ì‚éŒš•¨‚ª‘I‚Î‚ê‚½‚Æ‚«‚ÉŒÄ‚Î‚ê‚é </summary>
-    /// <param name="name">ì‚éƒvƒŒƒnƒu‚Ì–¼‘O</param>
+    /// <summary>ä½œã‚‹å»ºç‰©ãŒé¸ã°ã‚ŒãŸã¨ãã«å‘¼ã°ã‚Œã‚‹ </summary>
+    /// <param name="name">ä½œã‚‹ãƒ—ãƒ¬ãƒãƒ–ã®åå‰</param>
     public void SelectFacility(string name)
     {
         foreach (GameObject g in _factoryPosSetPrefab)
@@ -36,33 +36,32 @@ public class ConstructionManager : AbstractSingleton<ConstructionManager>
         _constructPos = _factoryPosSet.GetComponent<ConstructPos>();
         _constructPos.Es = _es;
     }
-    /// <summary>‘I‚Î‚ê‚Ä‚¢‚éŒš•¨‚Ìî•ñ‚ğƒ|ƒWƒVƒ‡ƒ“Œˆ’è‚Ü‚Å‚Á‚Ä‚¨‚­</summary>
-    /// <param name="prise">Œš•¨‚Ì‰¿Ši</param>
-    /// <param name="name">Œš•¨‚Ì–¼‘O</param>
+    /// <summary>é¸ã°ã‚Œã¦ã„ã‚‹å»ºç‰©ã®æƒ…å ±ã‚’ãƒã‚¸ã‚·ãƒ§ãƒ³æ±ºå®šã¾ã§æŒã£ã¦ãŠã</summary>
+    /// <param name="prise">å»ºç‰©ã®ä¾¡æ ¼</param>
+    /// <param name="name">å»ºç‰©ã®åå‰</param>
     public void SelectFacilityPriceAndName(int prise, string name)
     {
         _selectFacilityPrice = prise;
         _selectFacilityName = name;
     }
-    /// <summary> ƒ|ƒWƒVƒ‡ƒ“Œˆ’è‚ÉŒÄ‚Î‚ê‚é</summary>
+    /// <summary> ãƒã‚¸ã‚·ãƒ§ãƒ³æ±ºå®šæ™‚ã«å‘¼ã°ã‚Œã‚‹</summary>
     public void FacilitySet()
     {
         if (_constructPos.IsSet && _blueSheet == null)
         {
             _isSetButton.Invoke();
-            //GOLD.Instance.Gold -= _selectFacilityPrice;
-            //‚¨‹àŒ¸‚ç‚·ˆ—
+            GameManager.Instance.AddMoney(-_selectFacilityPrice);
             foreach (FacilityCount si in _maxFaciCount)
             {
                 if (si.Name == _selectFacilityName)
                 {
                     si.Count++;
-                }//—§‚Á‚Ä‚¢‚éŒš•¨‚Ì”‚ğ‚Ó‚â‚·BÅ‘å—§‚Ä‚ç‚ê‚é”
+                }//ç«‹ã£ã¦ã„ã‚‹å»ºç‰©ã®æ•°ã‚’ãµã‚„ã™ã€‚æœ€å¤§ç«‹ã¦ã‚‰ã‚Œã‚‹æ•°
             }
             _constructPos.Set();
         }
     }
-    /// <summary>ƒ|ƒWƒVƒ‡ƒ“Œˆ’è‚ğƒLƒƒƒ“ƒZƒ‹‚µ‚½‚Æ‚«‚ÉŒÄ‚Î‚ê‚é</summary>
+    /// <summary>ãƒã‚¸ã‚·ãƒ§ãƒ³æ±ºå®šã‚’ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã—ãŸã¨ãã«å‘¼ã°ã‚Œã‚‹</summary>
     public void FacilitySetCancel()
     {
         Destroy(_factoryPosSet);

@@ -1,21 +1,21 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class ConstructPos : MonoBehaviour
 {
-    [SerializeField, Tooltip("Œšİ‰Â”\ó‘Ô‚Ìƒ}ƒeƒŠƒAƒ‹")] Material green;
-    [SerializeField, Tooltip("Œšİ•s‰Â”\ó‘Ô‚Ìƒ}ƒeƒŠƒAƒ‹")] Material red;
+    [SerializeField, Tooltip("å»ºè¨­å¯èƒ½çŠ¶æ…‹ã®ãƒãƒ†ãƒªã‚¢ãƒ«")] Material green;
+    [SerializeField, Tooltip("å»ºè¨­ä¸å¯èƒ½çŠ¶æ…‹ã®ãƒãƒ†ãƒªã‚¢ãƒ«")] Material red;
     EventSystem _es;
     public EventSystem Es { set { _es = value; } }
-    [SerializeField, Tooltip("ˆÊ’uİ’è‚ÌRaycast‚ª“–‚½‚éƒŒƒCƒ„[A°‚Æ“¯‚¶‚à‚Ì‚É‚·‚é")] LayerMask _layerMask;
-    [SerializeField, Tooltip("ÚG‚µ‚ÄŒšİ•s‰Â”\‚É‚È‚é‚à‚Ì‚Ìƒ^ƒO")] string _tagName;
+    [SerializeField, Tooltip("ä½ç½®è¨­å®šã®RaycastãŒå½“ãŸã‚‹ãƒ¬ã‚¤ãƒ¤ãƒ¼ã€åºŠã¨åŒã˜ã‚‚ã®ã«ã™ã‚‹")] LayerMask _layerMask;
+    [SerializeField, Tooltip("æ¥è§¦ã—ã¦å»ºè¨­ä¸å¯èƒ½ã«ãªã‚‹ã‚‚ã®ã®ã‚¿ã‚°")] string _tagName;
     MeshRenderer _meshRenderer;
     bool _isSet = true;
     public bool IsSet { get { return _isSet; } }
-    [SerializeField, Tooltip("Œšİ’†‚ÌƒvƒŒƒnƒu")] GameObject _bluesheetPrefab;
-    [SerializeField, Tooltip("‚±‚ÌƒIƒuƒWƒFƒNƒg‚ÌˆÊ’u‚ª‚¸‚ê‚Ä‚¢‚½‚É’²®‚·‚é—p")] Vector3 _shiftPos;
+    [SerializeField, Tooltip("å»ºè¨­ä¸­ã®ãƒ—ãƒ¬ãƒãƒ–")] GameObject _bluesheetPrefab;
+    [SerializeField, Tooltip("ã“ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ä½ç½®ãŒãšã‚Œã¦ã„ãŸæ™‚ã«èª¿æ•´ã™ã‚‹ç”¨")] Vector3 _shiftPos;
 
     void Start()
     {
