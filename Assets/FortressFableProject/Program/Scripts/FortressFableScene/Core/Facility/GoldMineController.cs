@@ -9,8 +9,8 @@ public class GoldMineController : MonoBehaviour
     {
         if (goldMineData.currentGold >= goldMineData.maxGold) return;
         _timer += Time.deltaTime;
-        if (!(_timer >= goldMineData.timePerProduction)) return;
-        goldMineData.currentGold += goldMineData.assetPerProduction;
+        if (!(_timer >= goldMineData.TimePerProduction)) return;
+        goldMineData.currentGold += goldMineData.AssetPerProduction;
         if (goldMineData.currentGold > goldMineData.maxGold)
         {
             goldMineData.currentGold = goldMineData.maxGold;

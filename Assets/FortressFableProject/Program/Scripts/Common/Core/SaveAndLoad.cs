@@ -2,38 +2,83 @@
 using CookieClickerProject.Data;
 using UnityEngine;
 
-namespace FortressFableProject.Common
+namespace CookieClickerProject.Common
 {
-    public class SaveAndLoad : MonoBehaviour
+    public class SaveAndLoad : AbstractSingleton<SaveAndLoad>
     {
-        public DataStorage dataStorage;
+        protected override bool UseDontDestroyOnLoad => true;
 
-        private void OnEnable()
+        public StorageData StorageData { get; private set; }
+        private PlayerData PlayerData { get; set; }
+        private GameData GameData { get; set; }
+
+        private void Awake()
         {
-            dataStorage = ScriptableObject.CreateInstance<DataStorage>();
             LoadGame();
         }
 
+        /// <summary>
+        /// ゲーム一時停止時にセーブ
+        /// </summary>
+        /// <param name="pauseStatus"></param>
+        public void OnApplicationPause(bool pauseStatus)
+        {
+            if (pauseStatus)
+            {
+                SaveGame();
+            }
+        }
+
+        /// <summary>
+        /// ゲーム終了時にセーブ
+        /// </summary>
+        public void OnApplicationQuit()
+        {
+            SaveGame();
+        }
+
+        /// <summary>
+        /// ゲームデータをセーブ
+        /// </summary>
         public void SaveGame()
         {
-            SaveData saveData = new SaveData
+            StorageData storageData = new StorageData
             {
-                playerData = dataStorage.playerData,
-                gameData = dataStorage.gameData
+                PlayerData = this.PlayerData,
+                GameData = this.GameData
             };
-            string data = JsonUtility.ToJson(saveData, true);
+            string data = JsonUtility.ToJson(storageData, true);
             string filePath = Path.Combine(Application.persistentDataPath, "gameSave.json");
             File.WriteAllText(filePath, data);
         }
 
+        /// <summary>
+        /// ゲームデータをロード
+        /// </summary>
         public void LoadGame()
         {
             string filePath = Path.Combine(Application.persistentDataPath, "gameSave.json");
-            if (!File.Exists(filePath)) return;
-            string data = File.ReadAllText(filePath);
-            SaveData saveData = JsonUtility.FromJson<SaveData>(data);
-            JsonUtility.FromJsonOverwrite(JsonUtility.ToJson(saveData.playerData), dataStorage.playerData);
-            JsonUtility.FromJsonOverwrite(JsonUtility.ToJson(saveData.gameData), dataStorage.gameData);
+            if (File.Exists(filePath))
+            {
+                // ファイルが存在する場合、セーブデータをロード
+                string data = File.ReadAllText(filePath);
+                StorageData = JsonUtility.FromJson<StorageData>(data); // 直接プロパティにセット
+
+                // ロードしたデータがnullでないことを確認し、必要に応じてデフォルトのインスタンスを生成
+                PlayerData = StorageData.PlayerData ?? new PlayerData();
+                GameData = StorageData.GameData ?? new GameData();
+            }
+            else
+            {
+                // ファイルが存在しない場合、新規にPlayerDataとGameDataを作成
+                PlayerData = new PlayerData();
+                GameData = new GameData();
+                // StorageData プロパティにもこれらをセット
+                StorageData = new StorageData { PlayerData = PlayerData, GameData = GameData };
+
+                // 新規作成したデータをセーブして、次回のゲーム起動時に利用可能にする
+                SaveGame();
+            }
         }
     }
 }
