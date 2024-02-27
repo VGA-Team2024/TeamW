@@ -6,7 +6,11 @@
         "Units": [
             {
                 "Type": 1,
-                "Count": 4
+                "Count": 5
+            },
+            {
+                "Type": 2,
+                "Count": 2
             }
         ],
         "Facilities": [],

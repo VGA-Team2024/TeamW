@@ -18,13 +18,12 @@ namespace FortressFableProject.Program.Scripts.Common.Core
             _saveAndLoad.LoadGame();
             AddUnit(new Soldier { Type = UnitBase.UnitType.Soldier, Count = 1 });
             AddUnit(new Soldier { Type = UnitBase.UnitType.Soldier, Count = 1 });
+            AddUnit(new Worker { Type = UnitBase.UnitType.Worker, Count = 1 });
 
             _saveAndLoad.SaveGame();
         }
 
-        
-        
-        
+
         /// <summary>
         /// ユニットを追加
         /// </summary>
@@ -81,15 +80,12 @@ namespace FortressFableProject.Program.Scripts.Common.Core
             // ユニットの復元
             foreach (var unitData in _saveAndLoad.StorageData.GameData.Units)
             {
-                // ここで、実際にユニットのゲームオブジェクトを生成するロジックを実装します。
-                // 例: CreateUnitGameObject(unitData);
             }
 
             // 施設の復元
             foreach (var facilityData in _saveAndLoad.StorageData.GameData.Facilities)
             {
-                // ここで、実際に施設のゲームオブジェクトを生成するロジックを実装します。
-                // 例: CreateFacilityGameObject(facilityData);
+                ConstructionManager.Instance.GameLoad(facilityData);
             }
         }
     }
