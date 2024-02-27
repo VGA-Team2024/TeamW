@@ -16,7 +16,8 @@ public class BlueSheetScript : FacilityBase
         base.IsProducing = false;
         base.Position = this.gameObject.transform.position;
         _counter = Progress;
-        Tweener tw = DOTween.To(() => _counter, x => _counter = x, _waitTime, _waitTime - _counter).OnUpdate(() => 
+        Tweener tw = DOTween.To(() => _counter, x => _counter = x, _waitTime, _waitTime - _counter).SetEase(Ease.Linear)
+            .OnUpdate(() => 
         {
             base.WaitTime = _waitTime - _counter;
         }).OnComplete(() =>
