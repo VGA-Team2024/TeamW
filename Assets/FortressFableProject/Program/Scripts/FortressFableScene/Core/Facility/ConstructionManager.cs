@@ -1,4 +1,5 @@
 ﻿using CookieClickerProject.Common;
+using CookieClickerProject.Data;
 using FortressFableProject.Program.Scripts.Common.Core;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,6 +22,8 @@ public class ConstructionManager : AbstractSingleton<ConstructionManager>
     int _selectFacilityPrice;
     string _selectFacilityName;
 
+    [SerializeField] TypePrefab[] _facilityPrefabs;
+    [SerializeField] TypePrefab[] _blueSheetPrefabs;
     /// <summary>作る建物が選ばれたときに呼ばれる </summary>
     /// <param name="name">作るプレハブの名前</param>
     public void SelectFacility(string name)
@@ -67,6 +70,43 @@ public class ConstructionManager : AbstractSingleton<ConstructionManager>
         Destroy(_factoryPosSet);
     }
 
+    public void GameLoad(FacilityData data)
+    {
+        if(data.IsProducing == true) //建築後なら
+        {
+            foreach (TypePrefab typePrefab in _facilityPrefabs)
+            {
+                if(typePrefab.Type == data.Type)
+                {
+                    GameObject prefab = Instantiate(typePrefab.Prefab);
+                    FacilityBase fb = prefab.GetComponent<FacilityBase>();
+                    fb.Type = data.Type;
+                    fb.IsProducing = true;
+                    fb.transform.position = data.Position;
+                    if (data.Type == FacilityBase.FacilityType.Mine)
+                    {
+                        fb.TimePerProduction = data.TimePerProduction;
+                        fb.AssetPerProduction = data.AssetPerProduction;
+                    }
+                }
+            }
+        }
+        else //建築中なら
+        {
+            foreach (TypePrefab typePrefab in _facilityPrefabs)
+            {
+                if (typePrefab.Type == data.Type)
+                {
+                    GameObject prefab = Instantiate(typePrefab.Prefab);
+                    BlueSheetScript fb = prefab.GetComponent<BlueSheetScript>();
+                    fb.Type = data.Type;
+                    fb.IsProducing = false;
+                    fb.transform.position = data.Position;
+                    fb.ConstructWait((int)data.WaitTime);
+                }
+            }
+        }
+    }
 }
 
 public class FacilityCount
@@ -74,4 +114,10 @@ public class FacilityCount
     public string Name;
     public int MaxCount;
     public int Count;
+}
+
+public class TypePrefab
+{
+    public FacilityBase.FacilityType Type;
+    public GameObject Prefab;
 }
