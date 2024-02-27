@@ -1,6 +1,7 @@
 ﻿using CookieClickerProject.Common;
 using CookieClickerProject.Data;
 using FortressFableProject.Program.Scripts.Common.Core;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -108,14 +109,14 @@ public class ConstructionManager : AbstractSingleton<ConstructionManager>
         }
     }
 }
-
+[Serializable]
 public class FacilityCount
 {
     public string Name;
     public int MaxCount;
     public int Count;
 }
-
+[Serializable]
 public class TypePrefab
 {
     public FacilityBase.FacilityType Type;
