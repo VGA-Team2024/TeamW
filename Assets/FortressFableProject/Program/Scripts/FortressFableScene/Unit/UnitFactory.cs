@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,14 +8,14 @@ using UnityEngine;
 public class UnitFactory : MonoBehaviour
 {
     [Header("工員のプレハブ"), SerializeField] [Tooltip("工員のプレハブ")]
-    private GameObject _workersPrefab;
+    GameObject _workersPrefab;
 
     [Header("兵士のプレハブ"), SerializeField] [Tooltip("兵士のプレハブ")]
-    private GameObject _soldiersPrefab;
+    GameObject _soldiersPrefab;
 
 
-    // ユニットを生成するメソッド 戻り値：IUnit
-    public IUnit CreateUnit(string type, List<GameObject> list)
+    // ユニットを生成するメソッド 戻り値：UnitBase
+    public UnitBase CreateUnit(string type, List<GameObject> list)
     {
         GameObject prefab = null;
         switch (type)
@@ -35,14 +34,14 @@ public class UnitFactory : MonoBehaviour
         var go = Instantiate(prefab);
         list.Add(go);
 
-        var unitComponent = go.GetComponent<IUnit>();
+        var unitComponent = go.GetComponent<UnitBase>();
         if (unitComponent != null)
         {
             return unitComponent;
         }
         else
         {
-            Debug.LogError($"Prefab does not have an IUnit component: {type}");
+            Debug.LogError($"Prefab does not have an UnitBase component: {type}");
             return null;
         }
     }
