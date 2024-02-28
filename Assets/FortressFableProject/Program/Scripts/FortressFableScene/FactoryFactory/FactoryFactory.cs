@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 /// <summary>
@@ -14,22 +15,14 @@ public class FactoryFactory : MonoBehaviour
     /// <param name="type"></param>
     /// <param name="list"></param>
     /// <returns></returns>
-    public GameObject CreateFactory(FacilityBase.FacilityType type)
+    public GameObject CreateFacility(FacilityBase.FacilityType type)
     {
-        GameObject prefab = null;
-        switch (type)
+        GameObject prefab = type switch
         {
-            // 鉱山
-            case FacilityBase.FacilityType.Mine:
-                prefab = _minePrefab;
-                break;
-            default:
-                Debug.LogError($"Unknown factory type: {type}");
-                return null;
-        }
+            FacilityBase.FacilityType.Mine => _minePrefab,
+            _ => throw new ArgumentOutOfRangeException(nameof(type), $"Unsupported facility type: {type}")
+        };
 
-        var go = Instantiate(prefab);
-
-        return go;
+        return Instantiate(prefab);
     }
 }

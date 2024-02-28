@@ -73,41 +73,34 @@ public class ConstructionManager : AbstractSingleton<ConstructionManager>
 
     public void GameLoad(FacilityData data)
     {
-        if(data.IsProducing == true) //建築後なら
+        // FactoryManagerを介して施設のGameObjectを生成
+        GameObject prefab = FactoryManager.Instance.FactoryBuilding(data.Type);
+        if (prefab == null) return; // 施設の生成に失敗した場合は処理を中断
+
+        prefab.transform.position = data.Position; // 位置を設定
+
+        // 建築後の施設の設定
+        if (data.IsProducing)
         {
-            foreach (TypePrefab typePrefab in _facilityPrefabs)
-            {
-                if(typePrefab.Type == data.Type)
-                {
-                    GameObject prefab = Instantiate(typePrefab.Prefab);
-                    FacilityBase fb = prefab.GetComponent<FacilityBase>();
-                    fb.Type = data.Type;
-                    fb.IsProducing = true;
-                    fb.transform.position = data.Position;
-                    if (data.Type == FacilityBase.FacilityType.Mine)
-                    {
-                        fb.TimePerProduction = data.TimePerProduction;
-                        fb.AssetPerProduction = data.AssetPerProduction;
-                    }
-                }
-            }
+            FacilityBase fb = prefab.GetComponent<FacilityBase>();
+            if (fb == null) return;
+            fb.Type = data.Type;
+            fb.IsProducing = true;
+            // タイプに応じた追加のプロパティ設定
+            if (data.Type != FacilityBase.FacilityType.Mine) return;
+            fb.TimePerProduction = data.TimePerProduction;
+            fb.AssetPerProduction = data.AssetPerProduction;
         }
-        else //建築中なら
+        else // 建築中の施設の設定（ブルーシートを使用）
         {
-            foreach (TypePrefab typePrefab in _facilityPrefabs)
-            {
-                if (typePrefab.Type == data.Type)
-                {
-                    GameObject prefab = Instantiate(typePrefab.Prefab);
-                    BlueSheetScript fb = prefab.GetComponent<BlueSheetScript>();
-                    fb.Type = data.Type;
-                    fb.IsProducing = false;
-                    fb.transform.position = data.Position;
-                    fb.ConstructWait((int)data.WaitTime);
-                }
-            }
+            BlueSheetScript bss = prefab.GetComponent<BlueSheetScript>();
+            if (bss == null) return;
+            bss.Type = data.Type;
+            bss.IsProducing = false;
+            bss.ConstructWait((int)data.WaitTime);
         }
     }
+
 }
 [Serializable]
 public class FacilityCount

@@ -15,7 +15,7 @@ public class FactoryManager : AbstractSingleton<FactoryManager>
 
     void Start()
     {
-        _gameManager = FindObjectOfType<GameManager>();
+        _gameManager = GameManager.Instance;
     }
 
     /// <summary>
@@ -25,20 +25,25 @@ public class FactoryManager : AbstractSingleton<FactoryManager>
     /// オブジェクトを返す 建設側で位置を設定する必要がある
     public GameObject FactoryBuilding(FacilityBase.FacilityType buildingType)
     {
-        GameObject go = null;
-        switch (buildingType)
+        GameObject facilityObject = _factoryFactory.CreateFacility(buildingType);
+        if (facilityObject != null)
         {
-            // 鉱山
-            case FacilityBase.FacilityType.Mine:
-                go = _factoryFactory.CreateFactory(buildingType);
-                // GameManagerに保存
-                _gameManager.AddFacility(go.GetComponent<FacilityBase>());
-                break;
-            default:
-                Debug.LogError($"Unknown facilityType type: {buildingType}");
-                return null;
+            FacilityBase facilityComponent = facilityObject.GetComponent<FacilityBase>();
+            if (facilityComponent != null)
+            {
+                // GameManagerに施設データを保存
+                _gameManager.AddFacility(facilityComponent);
+            }
+            else
+            {
+                Debug.LogError("Facility component not found on the prefab.");
+            }
+        }
+        else
+        {
+            Debug.LogError($"Failed to create facility of type: {buildingType}");
         }
 
-        return go;
+        return facilityObject;
     }
 }
