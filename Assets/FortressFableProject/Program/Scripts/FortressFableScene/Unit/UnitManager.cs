@@ -1,9 +1,16 @@
 using System.Collections.Generic;
 using CookieClickerProject.Common;
+using FortressFableProject.Program.Scripts.Common.Core;
 using UnityEngine;
 
+/// <summary>
+/// ユニットを生成する機能を呼び出すクラス
+/// ユニット：工員、兵士
+/// </summary>
 public class UnitManager : AbstractSingleton<UnitManager>
 {
+    GameManager _gameManager = default;
+
     [Tooltip("現在の工員の数")] int _currentNumberOfWorkers;
     [Tooltip("現在の兵士の数")] int _currentNumberOfSoldiers;
     [Tooltip("現在の兵士の作成上限数")] int _currentMaxNumberOfSoldiers;
@@ -15,11 +22,11 @@ public class UnitManager : AbstractSingleton<UnitManager>
     int _numberOfCamps; // 取得する必要アリ
 
 
-    //[Header("工員のリスト"),SerializeField] 
-    [Tooltip("工員のリスト")] List<GameObject> _listOfWorkers;
+    [Header("工員のリスト"), SerializeField] [Tooltip("工員のリスト")]
+    List<GameObject> _listOfWorkers;
 
-    //[Header("兵士のリスト"),SerializeField] 
-    [Tooltip("兵士のリスト")] List<GameObject> _listOfSoldiers;
+    [Header("兵士のリスト"), SerializeField] [Tooltip("兵士のリスト")]
+    List<GameObject> _listOfSoldiers;
 
     [Header("UnitFactory"), SerializeField]
     UnitFactory _unitFactory;
@@ -59,6 +66,7 @@ public class UnitManager : AbstractSingleton<UnitManager>
 
     void Start()
     {
+        _gameManager = GameManager.Instance;
         CurrentNumberOfWorkers = 1;
         _listOfWorkers = new List<GameObject>();
         _listOfSoldiers = new List<GameObject>();
@@ -78,6 +86,8 @@ public class UnitManager : AbstractSingleton<UnitManager>
         var worker = _unitFactory.CreateUnit("Worker", _listOfWorkers);
         // 追加の工員管理ロジックが必要
         CurrentNumberOfWorkers = _listOfWorkers.Count;
+        // ゲームマネージャーに保存する
+        _gameManager.AddUnit(worker);
     }
 
     /// <summary>
@@ -92,6 +102,8 @@ public class UnitManager : AbstractSingleton<UnitManager>
             var soldier = _unitFactory.CreateUnit("Soldier", _listOfSoldiers);
             // 追加の兵士管理ロジックが必要
             CurrentNumberOfSoldiers = _listOfSoldiers.Count;
+            // ゲームマネージャーに保存する
+            _gameManager.AddUnit(soldier);
         }
         else
         {
