@@ -20,14 +20,7 @@ namespace FortressFableProject.Program.Scripts.Common.Core
             // AddUnit(new Soldier { Type = UnitBase.UnitType.Soldier, Count = 1 });
             // AddUnit(new Worker { Type = UnitBase.UnitType.Worker, Count = 1 });
             
-            AddFacility(new Training
-            {
-                Type = FacilityBase.FacilityType.TrainingFacility, 
-                IsProducing = false,
-                WaitTime = 0,
-                TimePerProduction = 5, 
-                AssetPerProduction = 100
-            });
+            
             _saveAndLoad.SaveGame();
         }
 
