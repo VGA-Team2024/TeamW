@@ -67,9 +67,9 @@ public class UnitManager : AbstractSingleton<UnitManager>
     void Start()
     {
         _gameManager = GameManager.Instance;
-        CurrentNumberOfWorkers = 1;
         _listOfWorkers = new List<GameObject>();
         _listOfSoldiers = new List<GameObject>();
+        CreateWorker(); // 初めに一体生成
     }
 
     void Update()
