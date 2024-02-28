@@ -15,12 +15,20 @@ namespace FortressFableProject.Program.Scripts.Common.Core
         private void Awake()
         {
             _saveAndLoad = SaveAndLoad.Instance;
-            _saveAndLoad.LoadGame();
+            LoadGame();
             // AddUnit(new Soldier { Type = UnitBase.UnitType.Soldier, Count = 1 });
             // AddUnit(new Soldier { Type = UnitBase.UnitType.Soldier, Count = 1 });
             // AddUnit(new Worker { Type = UnitBase.UnitType.Worker, Count = 1 });
-            //
-            // _saveAndLoad.SaveGame();
+            
+            AddFacility(new Training
+            {
+                Type = FacilityBase.FacilityType.TrainingFacility, 
+                IsProducing = false,
+                WaitTime = 0,
+                TimePerProduction = 5, 
+                AssetPerProduction = 100
+            });
+            _saveAndLoad.SaveGame();
         }
 
 
@@ -60,6 +68,8 @@ namespace FortressFableProject.Program.Scripts.Common.Core
             };
 
             _saveAndLoad.StorageData.GameData.Facilities.Add(facilityData);
+
+            _saveAndLoad.SaveGame();
         }
 
         public void AddWave()
@@ -71,6 +81,7 @@ namespace FortressFableProject.Program.Scripts.Common.Core
         {
             _saveAndLoad.StorageData.PlayerData.TotalMoney += money;
         }
+
 
         // ここから下は、実際にゲームオブジェクトを生成するロジックを実装します。
         public void LoadGame()
