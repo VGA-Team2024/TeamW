@@ -5,14 +5,14 @@ using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public class GoldMine : MonoBehaviour
+public class GoldMine : FacilityBase
 {
 
    public int CurrentGold = 0;
     int _timePlus = 1;
     Text _goldText = null;
     int _currentGold = 0;
-    int _maxGold = 10000;
+   public  int _maxGold = 10000;
     [SerializeField]  int _goldPlus = 10;
     float _timer = 0;
 
