@@ -7,13 +7,9 @@ using UnityEngine.UI;
 
 public class GoldMine : FacilityBase
 {
-
-   public int CurrentGold = 0;
-    int _timePlus = 1;
     Text _goldText = null;
-    int _currentGold = 0;
-   public  int _maxGold = 10000;
-    [SerializeField]  int _goldPlus = 10;
+    public int _maxGold = 10000;
+    [SerializeField] int _goldPlus = 10;
     float _timer = 0;
 
     private void Start()
@@ -24,22 +20,25 @@ public class GoldMine : FacilityBase
     private void Update()
     {
         _timer += Time.deltaTime;
-        if (_timer < _timePlus && _currentGold > _maxGold)
+        if (_timer < TimePerProduction && AssetPerProduction > _maxGold)
         {
-            _currentGold += _goldPlus;
+            AssetPerProduction += _goldPlus;
             _timer = 0;
-        }
-        else
-        {
-            _timer = 0;
+            if (_goldText != null)
+            {
+                _goldText.text = $"Gold: {AssetPerProduction}";
+            }
         }
     }
 
     private void OnMouseDown()
     {
-
         Debug.Log("回収");
         // Goldの合計変数に＋＝する
-        _currentGold = 0;
+        AssetPerProduction = 0;
+        if (_goldText != null)
+        {
+            _goldText.text = $"Gold: {AssetPerProduction}";
+        }
     }
 }
