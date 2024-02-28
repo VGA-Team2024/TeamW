@@ -7,13 +7,13 @@ public class GoldMineController : MonoBehaviour
 
     void Update()
     {
-        if (goldMineData.CurrentGold >= goldMineData._maxGold) return;
+        if (goldMineData.AssetPerProduction >= goldMineData._maxGold) return;
         _timer += Time.deltaTime;
         if (!(_timer >= goldMineData.TimePerProduction)) return;
-        goldMineData.CurrentGold += goldMineData.AssetPerProduction;
-        if (goldMineData.CurrentGold > goldMineData._maxGold)
+        goldMineData.AssetPerProduction += goldMineData.AssetPerProduction;
+        if (goldMineData.AssetPerProduction > goldMineData._maxGold)
         {
-            goldMineData.CurrentGold = goldMineData._maxGold;
+            goldMineData.AssetPerProduction = goldMineData._maxGold;
         }
         _timer = 0f;
     }
@@ -22,6 +22,6 @@ public class GoldMineController : MonoBehaviour
     {
         Debug.Log("Gold collected.");
         // ここでプレイヤーの全体ゴールドにgoldMineData.currentGoldを追加するロジックを実装
-        goldMineData.CurrentGold = 0;
+        goldMineData.AssetPerProduction = 0;
     }
 }

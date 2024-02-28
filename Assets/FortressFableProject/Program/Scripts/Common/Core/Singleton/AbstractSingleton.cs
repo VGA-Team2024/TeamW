@@ -21,19 +21,17 @@ namespace CookieClickerProject.Common
                     _instance = FindObjectOfType<T>();
 
                     // 既存のインスタンスが存在しない場合、新しいGameObjectを作成してコンポーネントをアタッチ
-                    if (_instance == null)
-                    {
-                        // 既存のインスタンスが存在しない場合、新しいGameObjectを作成してコンポーネントをアタッチ
-                        GameObject singletonObject = new GameObject();
-                        _instance = singletonObject.AddComponent<T>();
-                        singletonObject.name = typeof(T).ToString();
+                    if (_instance != null) return _instance;
+                    // 既存のインスタンスが存在しない場合、新しいGameObjectを作成してコンポーネントをアタッチ
+                    GameObject singletonObject = new GameObject();
+                    _instance = singletonObject.AddComponent<T>();
+                    singletonObject.name = typeof(T).ToString();
 
-                        // 継承先でDontDestroyOnLoadを使用するかどうかの判断
-                        AbstractSingleton<T> singleton = _instance as AbstractSingleton<T>;
-                        if (singleton != null && singleton.UseDontDestroyOnLoad)
-                        {
-                            DontDestroyOnLoad(singletonObject);
-                        }
+                    // 継承先でDontDestroyOnLoadを使用するかどうかの判断
+                    AbstractSingleton<T> singleton = _instance as AbstractSingleton<T>;
+                    if (singleton != null && singleton.UseDontDestroyOnLoad)
+                    {
+                        DontDestroyOnLoad(singletonObject);
                     }
                 }
 
