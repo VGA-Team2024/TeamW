@@ -1,44 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace CookieClickerProject.Data
 {
-    [Serializable]
+    [System.Serializable]
     public class GameData
     {
-        public List<Upgrade> availableUpgrades;
-        public List<Producer> availableProducers;
-        public List<ShopItem> shopItems;
+        public List<UnitData> Units = new List<UnitData>();
+        public List<FacilityData> Facilities = new List<FacilityData>();
+        public int Wave = 0;
     }
 
-    [Serializable]
-    public class ShopItem
-    {
-        public string itemName;
-        public int cost;
-
-        public string effect;
-        // その他の必要なフィールド...
-    }
-
-    [Serializable]
-    public class Upgrade
-    {
-        public string upgradeName;
-        public int cost;
-
-        public string effect;
-        // その他の必要なフィールド...
-    }
-
-
-    [Serializable]
-    public class Producer
-    {
-        public string producerName;
-        public int cost;
-
-        public int productionRate;
-        // その他の必要なフィールド...
-    }
 }
