@@ -1,3 +1,6 @@
+using System.Linq;
+using CookieClickerProject.Common;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -42,16 +45,35 @@ public class WarManager : MonoBehaviour, IWar
 
     void Start()
     {
+        _currentWave = SaveAndLoad.Instance.StorageData.GameData.Wave;
+        _gold = SaveAndLoad.Instance.StorageData.PlayerData.TotalMoney;
+        foreach (var count in SaveAndLoad.Instance.StorageData.GameData.Units.
+                     Where(count => count.Type == UnitBase.UnitType.Soldier))
+        {
+            _myForce = count.Count;
+        }
     }
 
     void Update()
     {
+        // テスト用
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            StartWave();
+        }
+
+        // 10秒後にEndWaveを呼び出す
+        
+        
+        
+        
     }
 
     public void StartWave()
     {
         _isWin = false;
         // ここでenemyForceとmyForceを取得
+        _enemyForce = 100;
     }
 
     public void EndWave()
