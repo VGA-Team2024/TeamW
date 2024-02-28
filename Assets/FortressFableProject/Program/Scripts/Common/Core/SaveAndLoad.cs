@@ -11,6 +11,7 @@ namespace CookieClickerProject.Common
         public StorageData StorageData { get; private set; }
         private PlayerData PlayerData { get; set; }
         private GameData GameData { get; set; }
+        private AudioData AudioData { get; set; }
 
         private void Awake()
         {
@@ -45,7 +46,8 @@ namespace CookieClickerProject.Common
             StorageData storageData = new StorageData
             {
                 PlayerData = this.PlayerData,
-                GameData = this.GameData
+                GameData = this.GameData,
+                AudioData = this.AudioData
             };
             string data = JsonUtility.ToJson(storageData, true);
             string filePath = Path.Combine(Application.dataPath, "gameSave.json");
@@ -65,16 +67,18 @@ namespace CookieClickerProject.Common
                 StorageData = JsonUtility.FromJson<StorageData>(data); // 直接プロパティにセット
 
                 // ロードしたデータがnullでないことを確認し、必要に応じてデフォルトのインスタンスを生成
+                AudioData = StorageData.AudioData ?? new AudioData();
                 PlayerData = StorageData.PlayerData ?? new PlayerData();
                 GameData = StorageData.GameData ?? new GameData();
             }
             else
             {
-                // ファイルが存在しない場合、新規にPlayerDataとGameDataを作成
+                // ファイルが存在しない場合、新規にPlayerDataとGameDataとAudioDataを生成
+                AudioData = new AudioData();
                 PlayerData = new PlayerData();
                 GameData = new GameData();
                 // StorageData プロパティにもこれらをセット
-                StorageData = new StorageData { PlayerData = PlayerData, GameData = GameData };
+                StorageData = new StorageData { AudioData = AudioData, PlayerData = PlayerData, GameData = GameData };
 
                 // 新規作成したデータをセーブして、次回のゲーム起動時に利用可能にする
                 SaveGame();

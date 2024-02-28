@@ -5,5 +5,6 @@
     {
         public PlayerData PlayerData = new();
         public GameData GameData = new();
+        public AudioData AudioData = new();
     }
 }
