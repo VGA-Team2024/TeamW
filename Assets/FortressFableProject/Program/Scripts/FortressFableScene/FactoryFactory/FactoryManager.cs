@@ -23,9 +23,20 @@ public class FactoryManager : AbstractSingleton<FactoryManager>
     /// </summary>
     /// <param name="buildingType"> 施設のタイプ </param>
     /// オブジェクトを返す 建設側で位置を設定する必要がある
-    public GameObject FactoryBuilding(FacilityBase.FacilityType buildingType)
+    public GameObject FactoryBuilding(FacilityBase.FacilityType buildingType, bool isProducing, float waitTime = 0)
     {
-        GameObject facilityObject = _factoryFactory.CreateFacility(buildingType);
+        GameObject facilityObject = null;
+        
+        // 建築中の施設（ブルーシート）を生成
+        if (!isProducing)
+        {
+            facilityObject = _factoryFactory.CreateBlueSheet(buildingType, waitTime);
+        }
+        else // 建築完了した施設を生成
+        {
+            facilityObject = _factoryFactory.CreateFacility(buildingType);
+        }
+        
         if (facilityObject != null)
         {
             FacilityBase facilityComponent = facilityObject.GetComponent<FacilityBase>();

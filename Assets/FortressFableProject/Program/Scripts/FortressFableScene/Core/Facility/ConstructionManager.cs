@@ -10,21 +10,39 @@ using UnityEngine.EventSystems;
 
 public class ConstructionManager : AbstractSingleton<ConstructionManager>
 {
-    [SerializeField, Tooltip("ポジションセット用プレハブ")] GameObject[] _factoryPosSetPrefab;
-    [SerializeField, Tooltip("いくつ作れるかクラスのリスト")] List<FacilityCount> _maxFaciCount;
-    public List<FacilityCount> MaxFaciCount { get { return _maxFaciCount; } set { _maxFaciCount = value; } }
+    [SerializeField, Tooltip("ポジションセット用プレハブ")]
+    GameObject[] _factoryPosSetPrefab;
+
+    [SerializeField, Tooltip("いくつ作れるかクラスのリスト")]
+    List<FacilityCount> _maxFaciCount;
+
+    public List<FacilityCount> MaxFaciCount
+    {
+        get { return _maxFaciCount; }
+        set { _maxFaciCount = value; }
+    }
 
     [SerializeField] EventSystem _es;
     ConstructPos _constructPos;
     GameObject _blueSheet = null;
-    public GameObject BlueSheet { get { return _blueSheet; } set { _blueSheet = value; } }
+
+    public GameObject BlueSheet
+    {
+        get { return _blueSheet; }
+        set { _blueSheet = value; }
+    }
+
     GameObject _factoryPosSet;
-    [SerializeField, Tooltip("建設できるときのボタンの処理")] UnityEvent _isSetButton;
+
+    [SerializeField, Tooltip("建設できるときのボタンの処理")]
+    UnityEvent _isSetButton;
+
     int _selectFacilityPrice;
     string _selectFacilityName;
 
     [SerializeField] TypePrefab[] _facilityPrefabs;
     [SerializeField] TypePrefab[] _blueSheetPrefabs;
+
     /// <summary>作る建物が選ばれたときに呼ばれる </summary>
     /// <param name="name">作るプレハブの名前</param>
     public void SelectFacility(string name)
@@ -36,10 +54,12 @@ public class ConstructionManager : AbstractSingleton<ConstructionManager>
                 _factoryPosSet = Instantiate(g);
             }
         }
+
         //_factoryPosSet = Instantiate(_factoryPosSetPrefab);
         _constructPos = _factoryPosSet.GetComponent<ConstructPos>();
         _constructPos.Es = _es;
     }
+
     /// <summary>選ばれている建物の情報をポジション決定まで持っておく</summary>
     /// <param name="prise">建物の価格</param>
     /// <param name="name">建物の名前</param>
@@ -48,6 +68,7 @@ public class ConstructionManager : AbstractSingleton<ConstructionManager>
         _selectFacilityPrice = prise;
         _selectFacilityName = name;
     }
+
     /// <summary> ポジション決定時に呼ばれる</summary>
     public void FacilitySet()
     {
@@ -60,11 +81,13 @@ public class ConstructionManager : AbstractSingleton<ConstructionManager>
                 if (si.Name == _selectFacilityName)
                 {
                     si.Count++;
-                }//立っている建物の数をふやす。最大立てられる数
+                } //立っている建物の数をふやす。最大立てられる数
             }
+
             _constructPos.Set();
         }
     }
+
     /// <summary>ポジション決定をキャンセルしたときに呼ばれる</summary>
     public void FacilitySetCancel()
     {
@@ -74,7 +97,7 @@ public class ConstructionManager : AbstractSingleton<ConstructionManager>
     public void GameLoad(FacilityData data)
     {
         // FactoryManagerを介して施設のGameObjectを生成
-        GameObject prefab = FactoryManager.Instance.FactoryBuilding(data.Type);
+        GameObject prefab = FactoryManager.Instance.FactoryBuilding(data.Type, data.IsProducing, (int)data.WaitTime);
         if (prefab == null) return; // 施設の生成に失敗した場合は処理を中断
 
         prefab.transform.position = data.Position; // 位置を設定
@@ -100,8 +123,8 @@ public class ConstructionManager : AbstractSingleton<ConstructionManager>
             bss.ConstructWait((int)data.WaitTime);
         }
     }
-
 }
+
 [Serializable]
 public class FacilityCount
 {
@@ -109,6 +132,7 @@ public class FacilityCount
     public int MaxCount;
     public int Count;
 }
+
 [Serializable]
 public class TypePrefab
 {
