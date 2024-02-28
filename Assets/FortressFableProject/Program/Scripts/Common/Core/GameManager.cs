@@ -73,7 +73,7 @@ namespace FortressFableProject.Program.Scripts.Common.Core
         }
 
         // ここから下は、実際にゲームオブジェクトを生成するロジックを実装します。
-        private void LoadGame()
+        public void LoadGame()
         {
             _saveAndLoad.LoadGame(); // セーブデータのロード
 
