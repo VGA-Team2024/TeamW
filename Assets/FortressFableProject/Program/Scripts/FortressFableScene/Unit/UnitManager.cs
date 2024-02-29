@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using CookieClickerProject.Common;
 using FortressFableProject.Program.Scripts.Common.Core;
 using UnityEngine;
@@ -74,7 +75,6 @@ public class UnitManager : AbstractSingleton<UnitManager>
 
     void Update()
     {
-        CurrentMaxNumberOfSoldiers = _numberOfCamps * 50;
     }
 
     /// <summary>
@@ -97,6 +97,19 @@ public class UnitManager : AbstractSingleton<UnitManager>
     /// </summary>
     public void CreateSoldier()
     {
+        // 所持ゴールドがコストを下回っていたら、兵士の生成不可
+        if (SaveAndLoad.Instance.StorageData.PlayerData.TotalMoney < _soldierPrice)
+        {
+            Debug.Log("Cannot create more soldiers. Need more gold.");
+            return;
+        }
+
+        // キャンプの数に応じて、作成上限を更新
+        _numberOfCamps =
+            SaveAndLoad.Instance.StorageData.GameData.Facilities.Count(count =>
+                count.Type == FacilityBase.FacilityType.Camp);
+        _currentMaxNumberOfSoldiers = _numberOfCamps * 50;
+
         if (_currentNumberOfSoldiers < _currentMaxNumberOfSoldiers)
         {
             var soldier = _unitFactory.CreateUnit("Soldier", _listOfSoldiers);
@@ -104,10 +117,20 @@ public class UnitManager : AbstractSingleton<UnitManager>
             CurrentNumberOfSoldiers = _listOfSoldiers.Count;
             // ゲームマネージャーに保存する
             _gameManager.AddUnit(soldier);
+            DecreaseGold(_soldierPrice);
         }
         else
         {
             Debug.LogWarning("Cannot create more soldiers. Max capacity reached.");
         }
+    }
+
+    /// <summary>
+    /// 兵士生成時の支払い機能
+    /// </summary>
+    /// <param name="cost"></param>
+    void DecreaseGold(int cost)
+    {
+        _gameManager.AddMoney(-cost);
     }
 }
