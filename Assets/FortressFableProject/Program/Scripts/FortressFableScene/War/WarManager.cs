@@ -1,5 +1,7 @@
+using System.Collections;
 using System.Linq;
 using CookieClickerProject.Common;
+using FortressFableProject.Program.Scripts.Common.Core;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -11,6 +13,9 @@ public class WarManager : MonoBehaviour, IWar
 {
     [Header("現在のウェーブ"), SerializeField] [Tooltip("現在のウェーブ")]
     int _currentWave;
+
+    [Header("ウェーブが進むごとに増やす敵の数"), SerializeField] [Tooltip("ウェーブが進むごとに増やす敵の数")]
+    int _addEnemyForce = 20;
 
     [Header("勝ったか"), SerializeField] [Tooltip("勝ったか")]
     bool _isWin;
@@ -24,15 +29,13 @@ public class WarManager : MonoBehaviour, IWar
     [Header("現在のゴールド"), SerializeField] [Tooltip("現在のゴールド")]
     int _gold;
 
+    [Header("戦争の結果が出るまでの時間"), SerializeField] [Tooltip("戦争の結果が出るまでの時間")]
+    float _timeOfWar = 10f;
+
+    WaitForSeconds _wfs = default;
+
 
     #region プロパティ
-
-    /// <summary> 現在のウェーブ </summary>
-    public int CurrentWave
-    {
-        get => _currentWave;
-        //set => _currentWave = value;
-    }
 
     /// <summary> 勝ったか </summary>
     public bool IsWin
@@ -46,12 +49,14 @@ public class WarManager : MonoBehaviour, IWar
     void Start()
     {
         _currentWave = SaveAndLoad.Instance.StorageData.GameData.Wave;
-        _gold = SaveAndLoad.Instance.StorageData.PlayerData.TotalMoney;
-        foreach (var count in SaveAndLoad.Instance.StorageData.GameData.Units.
-                     Where(count => count.Type == UnitBase.UnitType.Soldier))
+        foreach (var count in SaveAndLoad.Instance.StorageData.GameData.Units.Where(count =>
+                     count.Type == UnitBase.UnitType.Soldier))
         {
             _myForce = count.Count;
         }
+
+        _wfs = new WaitForSeconds(_timeOfWar);
+        _enemyForce = 100;
     }
 
     void Update()
@@ -63,17 +68,14 @@ public class WarManager : MonoBehaviour, IWar
         }
 
         // 10秒後にEndWaveを呼び出す
-        
-        
-        
-        
+        StartCoroutine(CallEndWave());
     }
 
     public void StartWave()
     {
+        _gold = SaveAndLoad.Instance.StorageData.PlayerData.TotalMoney;
+        // ここでmyForceを取得
         _isWin = false;
-        // ここでenemyForceとmyForceを取得
-        _enemyForce = 100;
     }
 
     public void EndWave()
@@ -90,8 +92,9 @@ public class WarManager : MonoBehaviour, IWar
     {
         if (_myForce >= _enemyForce)
         {
-            // 次のウェーブ
-            _currentWave++;
+            // ウェーブ加算
+            GameManager.Instance.AddWave();
+            ChangeEnemyForce();
             return _isWin = true;
         }
         else
@@ -115,13 +118,33 @@ public class WarManager : MonoBehaviour, IWar
         else
         {
             // 負けたら
-            _myForce = 0;
-            _gold -= (_enemyForce - _myForce) * 10;
+            var decrease = -(_enemyForce - _myForce) * 10;
+            GameManager.Instance.AddMoney(decrease);
+            //_myForce = 0;
         }
 
+        // マイナスにならないように調整
         if (_gold < 0)
         {
-            _gold = 0;
+            GameManager.Instance.AddMoney(-_gold);
         }
+    }
+
+    /// <summary>
+    /// 勝ったらウェーブ加算後に敵の戦力を増やす
+    /// </summary>
+    void ChangeEnemyForce()
+    {
+        _enemyForce += _addEnemyForce;
+    }
+
+    /// <summary>
+    /// 数秒後にEndWaveを呼ぶ
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator CallEndWave()
+    {
+        yield return _wfs;
+        EndWave();
     }
 }
